@@ -44,13 +44,7 @@ const  RegisterComplete=({history})=>{
             console.log(err);
            // toast.error(err.message);
         }
-    // const config={ url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
-    //     handleCodeInApp:true,
-    // };
-    // await auth.sendSignInLinkToEmail(email,config);
-    // toast.success(`Email sent to ${email}.Click link to complete your registration`);
-    // window.localStorage.setItem('emailForRegistration',email);
-    // setEmail('');
+
     };
     const completeRegistrationForm=()=>(
     <form onSubmit={handleSubmit}>

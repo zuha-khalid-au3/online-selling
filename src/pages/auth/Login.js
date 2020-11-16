@@ -1,30 +1,70 @@
 import React,{useState} from 'react';
 import {auth} from '../../firebase';
 import {toast,ToastContainer} from 'react-toastify';
+import {Button} from 'antd';
+import { AppstoreOutlined,LogoutOutlined, SettingOutlined, UserOutlined,UserAddOutlined,MailOutlined} from '@ant-design/icons';
+import {useDispatch} from 'react-redux';
 // import "react-toastify/dist/ReactToastify.css";
-const  Login=()=>{
+const  Login=({history})=>{
     const [email,setEmail]=useState('');
+    const [password,setPassword]=useState('');
+    const [loading,setLoading]=useState(false);
+    let dispatch=useDispatch();
+
     const handleSubmit=async (e)=>{
         e.preventDefault();
-    const config={ url: process.env.REACT_APP_Login_REDIRECT_URL,
-        handleCodeInApp:true,
-    };
-    await auth.sendSignInLinkToEmail(email,config);
-    toast.success(`Email sent to ${email}.Click link to complete your registration`);
-    window.localStorage.setItem('emailForRegistration',email);
-    setEmail('');
+        setLoading(true);
+        try{
+            const res= await auth.signInWithEmailAndPassword(email,password);
+            const {user}=res
+            const idToken= await user.getIdTokenResult()
+            //console.log(res);
+            dispatch({
+                type:'LOGGED_IN_USER',
+                payload:{
+                    email:user.email,
+                    token:idToken.token
+                },
+            });
+            history.push('/')
+        }
+        catch(err){
+            console.log(err);
+            toast(err.message);
+            setLoading(false);
+        }
     };
     const LoginForm=()=>(
     <form onSubmit={handleSubmit}>
-        <input
+      <div className="form-group">
+      <input
          type="email"
          className="form-control"
          value={email}
          onChange={(e)=>setEmail(e.target.value)}
          placeholder="Your email"
-         autoFocus/>
+         autoFocus
+         />
+      </div>
+      <div className="form-group">
+        <input
+         type="password"
+         className="form-control"
+         value={password}
+         onChange={(e)=>setPassword(e.target.value)}
+         placeholder="Enter Password"
+         autoFocus/> 
+         </div>
          <br/>
-        <button type="submit" className="btn btn-raised">Login</button>
+        <Button onClick={handleSubmit}
+        type="primary"
+        className="mb-3"
+        block
+        shape="round"
+        icon={<MailOutlined/>}
+        size="large"
+        disabled={!email||password.length<3}
+        >Login</Button>
     </form>
     );
     return (
