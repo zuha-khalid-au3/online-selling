@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import {auth} from '../../firebase';
-import {toast} from 'react-toastify';
+import {toast,ToastContainer} from 'react-toastify';
+// import "react-toastify/dist/ReactToastify.css";
 const  Register=()=>{
     const [email,setEmail]=useState('');
     const handleSubmit=async (e)=>{
