@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react';
 import {auth,googleAuthProvider} from '../../firebase';
-import {toast,ToastContainer} from 'react-toastify';
+import {toast} from 'react-toastify';
 import {Button} from 'antd';
-import { AppstoreOutlined,GoogleOutlined,LogoutOutlined, SettingOutlined, UserOutlined,UserAddOutlined,MailOutlined} from '@ant-design/icons';
+import { GoogleOutlined,MailOutlined} from '@ant-design/icons';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import axios from 'axios';
+//import axios from 'axios';
 import {createOrUpdateUser} from '../../functions/auth'
 
 
@@ -18,7 +18,7 @@ const  Login=({history})=>{
     useEffect(()=>{
         if(user&&user.token)
         history.push('/')
-    },[user])
+    },[user,history])
     let dispatch=useDispatch();
 const roleBasedRedirect=(res)=>{
         if(res.data.role === 'admin'){

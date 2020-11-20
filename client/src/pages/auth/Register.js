@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import {auth} from '../../firebase';
 import {toast} from 'react-toastify';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 const  Register=({history})=>{
     const [email,setEmail]=useState('');
     const handleSubmit=async (e)=>{
@@ -19,7 +19,7 @@ const  Register=({history})=>{
     useEffect(()=>{
         if(user&&user.token)
         history.push('/')
-    },[user])
+    },[user,history])
 
     const registerForm=()=>(
     <form onSubmit={handleSubmit}>
