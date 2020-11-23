@@ -55,7 +55,7 @@ return (
         <Item>
           <Link to="/admin/dashboard">Dashboard</Link>
           </Item>
-      )}
+      )} 
       <Item icon={<LogoutOutlined/>} onClick={logout}>
       Logout
       </Item>
