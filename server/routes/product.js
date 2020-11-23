@@ -3,9 +3,10 @@ const express=require('express');
 
 const {authCheck,adminCheck} =require('../middlewares/auth');
 const router = express.Router();
-const {create}=require('../controllers/product');
+const {create,read}=require('../controllers/product');
 //router.get('/categories',list);
 router.post('/product',authCheck,adminCheck,create);
+router.post('/products',read);
 
 
 

@@ -68,9 +68,7 @@ const SubCreate = () => {
     }
     }
    
-    //step 4 
-
-    const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
+   const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
 
     
  return (
@@ -88,7 +86,7 @@ const SubCreate = () => {
                 )}
                 {console.log(subs)}
                     <div className="form-group">
-                        <label>Category</label>
+                        <label> Parent Category</label>
                         <select name="Parent Category" className="form-control" onChange={e => setCategory(e.target.value)}>
                             <option>Please Select</option>
                             {categories.length > 0 && categories.map((c) => (<option key={c._id} value={c._id}>{c.name}</option>))}
