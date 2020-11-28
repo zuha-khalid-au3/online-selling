@@ -33,21 +33,21 @@ const productSchema = new mongoose.Schema({
     },
     subs:[{
         type:ObjectId,
-        ref:"Sub"
+        ref:"Sub",
     },
 ],
     quantity:Number,
     sold:{
         type:Number,
-        default:0
+        default:0,
     },
-    // images:{
-    //     type:Array
-    // },
+    images:{
+        type:Array,
+    },
 
     shipping:{
         type:String,
-        enum:['Yes', 'No']
+        enum:['Yes','No']
     },
     color:{
         type:String,
@@ -62,7 +62,7 @@ const productSchema = new mongoose.Schema({
     //     postedBy:{type:ObjectId, ref:"User"},
     // },],
   },
-  {timestamp: true}
+  {timestamps: true}
   );
 
   module.exports = mongoose.model('Product',productSchema);
