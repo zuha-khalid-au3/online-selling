@@ -1,6 +1,8 @@
 const Category=require('../models/category');
 const Sub=require('../models/sub');
+const Product=require('../models/product');
 const slugify =require('slugify');
+//const { default: Product } = require('../../client/src/pages/Product');
 exports.create=async (req,res) =>{
 try{
     const {name}=req.body
@@ -17,8 +19,12 @@ exports.list=async (req,res) =>{
      res.json(await Category.find({}).sort({createdAt:-1}).exec());
   }
 exports.read=async (req,res) =>{
-   let category =await (await Category.findOne({slug:req.params.slug}).exec());
-   res.json(category);
+   const category =await (await Category.findOne({slug:req.params.slug}).exec());
+  const products=await Product.find({category:category})
+   .populate('category')
+   .exec()
+
+   res.json({category,products});
 }  
 exports.update=async (req,res) =>{
     const {name}=req.body;
