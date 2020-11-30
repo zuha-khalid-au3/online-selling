@@ -2,11 +2,16 @@ import React from 'react'
 import {Card} from 'antd';
 import {EyeOutlined,ShoppingCartOutlined} from '@ant-design/icons';
 import {Link} from 'react-router-dom';
+import {showAverage} from '../../functions/rating'
 const {Meta} =Card;
 const ProductCard=({product})=>{
 
     const {images,title,slug,description}=product;
 return(
+   <> 
+    {product && product.ratings && product.ratings.length > 0 ?
+          (  showAverage(product)):(
+            <div className="text-center pt-1 pb-3">No rating yet</div>)}
 <Card
 cover={
     // eslint-disable-next-line jsx-a11y/alt-text
@@ -17,7 +22,7 @@ cover={
     />
 }
 actions={[
-    <Link to={`/admin/product/${slug}`}>
+    <Link to={`/product/${slug}`}>
         <EyeOutlined className="text-warning"/>
         <br/> View Product
     </Link>,
@@ -31,6 +36,7 @@ actions={[
     description={`${description && description.substring(0,40)}... `}
     />
     </Card>
+    </>
 )
 }
 

@@ -18,14 +18,20 @@ const  Login=({history})=>{
     useEffect(()=>{
         if(user&&user.token)
         history.push('/')
-    },[user,history])
+    },[user,history]);
+    
     let dispatch=useDispatch();
 const roleBasedRedirect=(res)=>{
+        let intended=history.location.state;
+        if(intended){
+            history.push('intended.from')
+        }else{
         if(res.data.role === 'admin'){
             history.push('/admin/dashboard');
         }else{
             history.push('/user/history');
         }
+    }
     }    
     
 
