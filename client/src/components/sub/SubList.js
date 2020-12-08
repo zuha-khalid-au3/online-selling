@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom';
-import {getCategories} from '../../functions/category';
+import {getSubs} from '../../functions/sub';
 
 
 function SubList() {
@@ -9,7 +9,7 @@ function SubList() {
 
     useEffect(() => {
         setLoading(true);
-        getCategories().then((c) =>
+        getSubs().then((c) =>
         {
             setSubs(c.data);
             setLoading(false)

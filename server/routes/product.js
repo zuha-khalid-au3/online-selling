@@ -3,7 +3,7 @@ const express=require('express');
 
 const {authCheck,adminCheck} =require('../middlewares/auth');
 const router = express.Router();
-const {create,listRelated,
+const {create,listRelated,searchFilters,
     listAll,remove,read,list,update,productsCount,productStar}=require('../controllers/product');
 //router.get('/categories',list);
 
@@ -19,5 +19,6 @@ router.post('/products',list);
 router.put('/product/star/:productId',authCheck,productStar);
 router.get('/product/related/:productId',listRelated)
 
+router.post('/search/filters',searchFilters);
 
 module.exports = router;

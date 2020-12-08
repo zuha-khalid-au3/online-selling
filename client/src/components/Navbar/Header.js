@@ -1,10 +1,17 @@
 import React,{useState} from 'react'
 import {Menu} from 'antd';
-import { AppstoreOutlined,LogoutOutlined, SettingOutlined, UserOutlined,UserAddOutlined } from '@ant-design/icons';
+import { AppstoreOutlined,
+  LogoutOutlined,
+   SettingOutlined, 
+   UserOutlined,
+   UserAddOutlined,
+  ShoppingOutlined } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
 import firebase from 'firebase';
 import {useDispatch,useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
+import Search from '../forms/Search';
+
 const { SubMenu,Item } = Menu;
 
 const Header=()=>{
@@ -27,8 +34,11 @@ const logout=()=>{
 return (
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
     <Item key="home" icon={<AppstoreOutlined />}>
-{/* <Link to="/"> Home -{JSON.stringify(user)}</Link> */}
-<Link to="/"> Home </Link>
+    <Link to="/"> Home </Link>
+    </Item>
+
+    <Item key="shop" icon={<ShoppingOutlined />}>
+    <Link to="/shop"> Shop </Link>
     </Item>
     {!user && ( 
       <Item key="register" icon={<UserAddOutlined />} className="float-right">
@@ -61,6 +71,9 @@ return (
       </Item>
   </SubMenu>
       )}
+      <span className="float-right p-1">
+        <Search/>
+      </span>
   </Menu>
 );
 };
