@@ -24,7 +24,7 @@ const  Login=({history})=>{
 const roleBasedRedirect=(res)=>{
         let intended=history.location.state;
         if(intended){
-            history.push('intended.from')
+            history.push(intended.from)
         }else{
         if(res.data.role === 'admin'){
             history.push('/admin/dashboard');
