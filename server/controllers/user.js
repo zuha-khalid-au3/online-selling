@@ -1,6 +1,6 @@
 const User= require('../models/user');
 const Product= require('../models/product');
-const Cart= require('../models/cart');
+// const Cart= require('../models/cart');
 
 
 
@@ -22,7 +22,7 @@ exports.userCart=async(req,res)=>{
         obj.count=cart[i].count;
         obj.color=cart[i].color;
 
-        let productFromDb =await  Product.findById(cart[i]._id).select('price').exec();
+        let productFromDb =await Product.findById(cart[i]._id).select('price').exec();
 
         obj.price=productFromDb.price;
         products.push(obj);
@@ -32,19 +32,20 @@ exports.userCart=async(req,res)=>{
         cartTotal= cartTotal + products[i].price * products[i].count;
     }
 
-    let newCart= await Cart({
+    let newCart= await new Cart({
         products,
         cartTotal,
         orderdBy:user._id,
     }).save();
 
     res.json({ok:true});
-}
+};
 
-exports.getUserCart = async(req,res)=>{
+exports.getUserCart = async (req,res)=>{
     const user= await User.findOne({email:req.user.email}).exec();
 
-    let cart=await Cart.findOne({orderdBy:user._id}).populate('products.product','_id title price totalAfterDiscount')
+    let cart=await Cart.findOne({orderdBy:user._id})
+    .populate("products.product","_id title price totalAfterDiscount")
     .exec();
 
     const {products,cartTotal,totalAfterDiscount} = cart;

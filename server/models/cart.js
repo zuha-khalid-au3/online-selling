@@ -10,12 +10,14 @@ const cartSchema= new mongoose.Schema({
             },
             count:Number,
             color:String,
-            price:Number
-        }
+            price:Number,
+        },
     ],
     cartTotal:Number,
     totalAfterDiscount:Number,
     orderdBy:{type:ObjectId,ref:"User"},
-},{timeStamps:true});
+},
+{timestamps:true}
+);
 
 module.exports = mongoose.model('Cart',cartSchema)
