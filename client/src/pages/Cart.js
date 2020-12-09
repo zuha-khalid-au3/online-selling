@@ -3,7 +3,8 @@ import {useSelector,useDispatch} from 'react-redux';
 
 import {Link} from 'react-router-dom';
 import ProductCardInCheckout from '../components/cards/ProductCardInCheckout';
-const Cart =()=>{
+import {userCart} from '../functions/user'
+const Cart =({history})=>{
     const {cart,user}=useSelector((state) => ({ ...state }));
     const dispatch=useDispatch();
 
@@ -14,8 +15,13 @@ const Cart =()=>{
     };
 
     const saveOrderToDb =()=>{
-
-    };
+        userCart(cart,user.token)
+        .then((res)=>{
+            console.log(res);
+            if(res.data.ok)  history.push('/checkout')
+        }).catch((err)=>console.log(err));
+        };
+       
 
     const showCartItems =()=>(
         <table className="table table-bordered">
@@ -56,13 +62,13 @@ const Cart =()=>{
             <p>Products</p>
             {cart.map((c,i)=>(
                 <div key={i}>
-                    <p>{c.title} x {c.quantity} =${c.price * c.count }
+                    <p>{c.title} x {c.quantity} =₹{c.price * c.count }
                     
                     </p>
                     </div>
             ))}
             <hr/>
-            Total:<b>${getTotal()}</b>
+            Total:<b>₹{getTotal()}</b>
             {
                 user?(
                     <button onClick={saveOrderToDb} className="btn btn-sm btn-primary mt-2"
