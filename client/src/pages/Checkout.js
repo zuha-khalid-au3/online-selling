@@ -1,5 +1,6 @@
 import React,{useState, useEffect}from 'react'
 import {useSelector,useDispatch} from 'react-redux';
+import axios from 'axios';
 import {getUserCart,emptyUserCart,saveUserAddress,
 applyCoupon} from '../functions/user';
 import {toast} from 'react-toastify';
@@ -16,12 +17,14 @@ function Checkout({history}) {
     const [discountError,setDiscountError]=useState('');
     const dispatch=useDispatch();
     const {user}=useSelector((state) => ({ ...state }))
+    //const [k,setK]=useState(0);
     
     useEffect(() => {
         getUserCart(user.token)
         .then((res)=>{
         setProducts(res.data.products);
         setTotal(res.data.cartTotal);
+       // console.log(typeof(res))
         })
     },[])
     const emptyCart=()=>{
@@ -49,6 +52,7 @@ function Checkout({history}) {
         .then((res)=>{
             setAddressSaved(true)
             toast.success('Address saved');
+            //console.log(typeof(parseFloat(JSON.stringify({total}))));
         }
             )
     };
@@ -66,7 +70,7 @@ function Checkout({history}) {
 
         products.map((p,i)=>(
             <div key={i}>
-                <p>{p.product.title} ({p.color}) x {p.count}={" "}
+                <p>{p.product.title} ({p.color}) x {p.count} = {"₹"}
                 {p.product.price * p.count}
                 </p>
                 </div>
@@ -109,6 +113,98 @@ function Checkout({history}) {
                 </>
             )
 
+               //Paytm-Checkout
+
+               function isDate(val) {
+                // Cross realm comptatible
+                return Object.prototype.toString.call(val) === '[object Date]'
+              }
+              
+              function isObj(val) {
+                return typeof val === 'object'
+              }
+              
+               function stringifyValue(val) {
+                if (isObj(val) && !isDate(val)) {
+                  return JSON.stringify(val)
+                } else {
+                  return val
+                }
+              }
+               function buildForm({ action, params }) {    
+                const form = document.createElement('form')
+                form.setAttribute('method', 'post')
+                form.setAttribute('action', action)
+              
+                Object.keys(params).forEach(key => {
+                  const input = document.createElement('input')
+                  input.setAttribute('type', 'hidden')
+                  input.setAttribute('name', key)
+                  input.setAttribute('value', stringifyValue(params[key]))
+                  form.appendChild(input)
+                })
+              
+                return form
+              }
+              
+               function post(details) {
+                const form = buildForm(details)
+                document.body.appendChild(form)
+                form.submit()
+                form.remove()
+              }
+            const getData=(data)=>
+            {
+          
+              return fetch(`http://localhost:8000/api/payment`,{
+                  method:"POST",
+                  headers:{
+                      Accept:"application/json",
+                      "Content-Type":"application/json"
+                  },
+                  body:JSON.stringify(data)
+              }).then(response=>response.json()).catch(err=>console.log(err))
+            }
+          
+            const makePayment=()=>
+            {   
+             getUserCart(user.token)
+                 .then((res)=>
+                 {
+                     var k= res.data.cartTotal;
+                    // console.log(k);
+                     getData({amount:k,email:'abc@gmail.com'})
+                     .then(response=>{
+                      
+                         var information={
+                             action:"https://securegw-stage.paytm.in/order/process",
+                             params:response
+                         }
+                       post(information)
+                 }
+                     )
+                }
+                
+                   
+               //var z= parseInt(JSON.stringify({total}));
+               
+                // var z=JSON.stringify(parseInt({total}));
+        // getData({amount:z.data.cartTotal,email:'abc@gmail.com'})
+        // .then(response=>{
+         
+        //     var information={
+        //         action:"https://securegw-stage.paytm.in/order/process",
+        //         params:response
+        //     }
+        //   post(information)
+        
+        // })
+    
+                   ) 
+                 }
+                
+
+                
     return (
         <div className="row">
             <div className="col-md-6">
@@ -130,7 +226,7 @@ function Checkout({history}) {
               <hr/>
              {showProductSummary()}
               <hr/>
-              <p>Cart Total:{total}</p>
+              <p>Cart Total= ₹{total}</p>
                 {totalAfterDiscount>0 && (
                     <p className="bg-success p-2">Discount Applied-Total Payable:{totalAfterDiscount}</p>
                 )}
@@ -139,7 +235,7 @@ function Checkout({history}) {
                   <div className="col-md-6">
                       <button className="btn btn-primary"
                       disabled={!addressSaved || !products.length}
-                      onClick={()=>history.push('/payment')}
+                      onClick={makePayment}
                       >
                           Place Order
                       </button>
